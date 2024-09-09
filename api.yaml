@@ -1,0 +1,336 @@
+openapi: 3.0.3
+info:
+  title: ITS Reg
+  description: ITS Reg
+  version: 1.0.0
+servers:
+  - url: 'http://{hostname}/api'
+    variables:
+      hostname:
+        default: localhost:8400
+security:
+  - bearerAuth: []
+
+paths:
+  /bots:
+    post:
+      operationId: createBot
+      requestBody:
+        description: TODO
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostBots'
+      responses:
+        201:
+          description: TODO
+        400:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Missing JWT token in header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      operationId: getBots
+      responses:
+        200:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBots'
+        401:
+          description: Missing JWT token in header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /bots/{uuid}:
+    get:
+      operationId: getBot
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            example: 14ab-d740
+          required: true
+          description: TODO
+      responses:
+        200:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bot'
+        401:
+          description: Missing JWT token in header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /bots/{uuid}/answers:
+    get:
+      operationId: getAnswers
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            example: 14ab-d740
+          required: true
+          description: TODO
+      responses:
+        200:
+          description: TODO
+          content:
+            text/csv: {}
+        401:
+          description: Missing JWT token in header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /bots/{uuid}/start:
+    post:
+      operationId: startBot
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            example: 14ab-d740
+          required: true
+          description: TODO
+      responses:
+        200:
+          description: TODO
+        401:
+          description: Missing JWT token in header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /bots/{uuid}/stop:
+    post:
+      operationId: stopBot
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            example: 14ab-d740
+          required: true
+          description: TODO
+      responses:
+        200:
+          description: TODO
+        401:
+          description: Missing JWT token in header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+
+    Option:
+      type: object
+      required:
+        - text
+        - next
+      properties:
+        text:
+          type: string
+          example: "Option 1"
+        next:
+          type: integer
+          example: 2
+
+    Block:
+      type: object
+      required:
+        - type
+        - state
+        - nextState
+        - title
+        - text
+      properties:
+        type:
+          type: string
+          enum:
+            - message
+            - question
+            - selection
+          example: message
+        state:
+          type: integer
+          example: 1
+        nextState:
+          type: integer
+          example: 2
+        title:
+          type: string
+          example: Greeting
+        text:
+          type: string
+          example: Hello, user!
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+
+    EntryPoint:
+      type: object
+      required:
+        - key
+        - state
+      properties:
+        key:
+          type: string
+          example: start
+        state:
+          type: integer
+          example: 1
+
+    Bot:
+      type: object
+      required:
+        - botUUID
+        - name
+        - token
+        - status
+        - entries
+        - blocks
+        - createdAt
+        - updatedAt
+      properties:
+        botUUID:
+          type: string
+          example: 14ab-d740
+        name:
+          type: string
+          example: Example bot
+        token:
+          type: string
+        status:
+          type: string
+          enum:
+            - started
+            - stopped
+            - failed
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntryPoint'
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    PostBots:
+      type: object
+      required:
+        - botUUID
+        - name
+        - token
+        - entries
+        - blocks
+      properties:
+        botUUID:
+          type: string
+          example: 14ab-d740
+        name:
+          type: string
+          example: Example bot
+        token:
+          type: string
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntryPoint'
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
+
+    GetBots:
+      type: array
+      items:
+        $ref: '#/components/schemas/Bot'
+
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: error message
