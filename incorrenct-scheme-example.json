@@ -1,0 +1,78 @@
+{
+    "botUUID": "test_bot_uncorrect1",
+    "name": "my-bot",
+    "token": "6277601007:AAECQkdMAKkIrkoDxXhG4Bg2CJymJddeqw8",
+    "entries": [
+      {
+        "key": "start",
+        "state": "1"
+      },
+      {
+        "key": "ask_5",
+        "state": "5"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "selection",
+        "state": "1",
+        "nextState": "6",
+        "title": "is_bmstu",
+        "text": "Вы студент МГТУ им. Н.Э. Баумана?",
+        "options": [
+          {
+            "text": "Да",
+            "next": "2"
+          },
+          {
+            "text": "Нет",
+            "next": "3"
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "state": "2",
+        "nextState": "4",
+        "title": "thanks",
+        "text": "Отлично, бауманец!"
+      },
+      {
+        "type": "question",
+        "state": "3",
+        "nextState": "2",
+        "title": "Uni",
+        "text": "Укажите ваш ВУЗ пожалуйста."
+      }
+      ,
+      {
+        "type": "message",
+        "state": "5",
+        "nextState": "0",
+        "title": "msg",
+        "text": "Спасибо за регистрацию!"
+      },
+      {
+        "type": "message",
+        "state": "5",
+        "nextState": "0",
+        "title": "msg",
+        "text": "Привет бауманец"
+      }
+      ,
+      {
+        "type": "message",
+        "state": "6",
+        "nextState": "1",
+        "title": "err",
+        "text": "Ошибка, нажмите кнопку!"
+      }
+    ],
+    "mailings": [
+      {
+        "name": "bmstu",
+        "entryKey": "ask_5",
+        "requiredState": "2"
+      }
+    ]
+  }
